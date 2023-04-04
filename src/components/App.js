@@ -9,6 +9,14 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
+  const [selectedCard, setSelectedCard] = React.useState({});
+
+  function closeAllPopups() {
+    setIsEditProfilePopupOpen(false);
+    setIsAddPlacePopupOpen(false);
+    setIsEditAvatarPopupOpen(false);
+    setSelectedCard({});
+  }
 
   return (
     <div className="page__container">
@@ -17,15 +25,21 @@ function App() {
         onEditProfile={setIsEditProfilePopupOpen}
         onAddPlace={setIsAddPlacePopupOpen}
         onEditAvatar={setIsEditAvatarPopupOpen}
+        onCardClick={setSelectedCard}
       />
       <Footer />
-      <ImagePopup />
+
+      <ImagePopup
+        card={selectedCard}
+        onClose={closeAllPopups}>
+      </ImagePopup>
 
       <PopupWithForm
         name="avatar"
         title="Обновить аватар"
         buttonText="Сохранить"
-        isOpen={isEditAvatarPopupOpen}>
+        isOpen={isEditAvatarPopupOpen}
+        onClose={closeAllPopups}>
         <input className="popup__input-text" id="profilePhotoURL" name="link" type="url" placeholder="Ссылка на картинку"
           required />
         <span className="popup__input-error profilePhotoURL-error"></span>
@@ -41,7 +55,8 @@ function App() {
         name="profile"
         title="Редактировать профиль"
         buttonText="Сохранить"
-        isOpen={isEditProfilePopupOpen}>
+        isOpen={isEditProfilePopupOpen}
+        onClose={closeAllPopups}>
         <input className="popup__input-text" id="name" name="name" type="text" maxlength="40" minlength="2"
           placeholder="Имя" required />
         <span className="popup__input-error name-error"></span>
@@ -54,7 +69,8 @@ function App() {
         name="newPlace"
         title="Новое место"
         buttonText="Сохранить"
-        isOpen={isAddPlacePopupOpen}>
+        isOpen={isAddPlacePopupOpen}
+        onClose={closeAllPopups}>
         <input className="popup__input-text" id="placeName" name="name" type="text" maxlength="30" minlength="2"
           placeholder="Название" required />
         <span className="popup__input-error placeName-error"></span>
@@ -62,20 +78,6 @@ function App() {
           required />
         <span className="popup__input-error placePhotoURL-error"></span>
       </PopupWithForm>
-
-      <template id="card">
-        <article className="card">
-          <button className="card__delete" aria-label="удаление карточки" type="button"></button>
-          <img src="#" className="card__image" alt="#" />
-          <div className="card__name">
-            <h2 className="card__title"></h2>
-            <div className="card__like-container">
-              <button className="card__button-like" aria-label="лайк" type="button"></button>
-              <p className="card__like-counter">0</p>
-            </div>
-          </div>
-        </article>
-      </template>
 
     </div>
   );
