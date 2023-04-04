@@ -1,8 +1,7 @@
-function Card(card) {
+function Card({card, onCardClick}) {
 
   function handleCardClick() {
-    console.log(card);
-    card.onCardClick(card);
+    onCardClick(card);
   }
 
   return (
@@ -13,7 +12,7 @@ function Card(card) {
         <h2 className="card__title">{card.name}</h2>
         <div className="card__like-container">
           <button className="card__button-like" aria-label="лайк" type="button"></button>
-          <p className="card__like-counter">{card.counter}</p>
+          <p className="card__like-counter">{card.likes.length}</p>
         </div>
       </div>
     </article>
