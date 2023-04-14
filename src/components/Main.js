@@ -1,39 +1,23 @@
-import { useState, useEffect } from 'react';
-import api from '../utils/api.js';
+import { useContext } from 'react';
 import Card from './Card.js';
+import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
-function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
-  const [userName, setUserName] = useState('');
-  const [userDescription, setUserDescription] = useState('');
-  const [userAvatar, setUserAvatar] = useState('');
-  const [cards, setCards] = useState([]);
-
-  useEffect(() => {
-    Promise.all([api.getPersonInfo(), api.getCards()])
-      .then(([dataUser, card]) => {
-        setUserName(dataUser.name);
-        setUserDescription(dataUser.about);
-        setUserAvatar(dataUser.avatar);
-        setCards(card);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCardLike, onCardDelete, cards }) {
+  const dataUser = useContext(CurrentUserContext);
 
   return (
     <main className="main">
       <section className="profile">
         <div className="profile__info">
           <button onClick={() => onEditAvatar(true)} className="profile__avatar-edit" type="button">
-            <img src={userAvatar} className="profile__photo" alt="фото профиля" />
+            <img src={dataUser.avatar} className="profile__photo" alt="фото профиля" />
           </button>
           <div className="profile__wrapper">
             <div className="profile__name">
-              <h1 className="profile__title">{userName}</h1>
+              <h1 className="profile__title">{dataUser.name}</h1>
               <button onClick={() => onEditProfile(true)} className="button button_edit_open" aria-label="редактор данных пользователя" type="button"></button>
             </div>
-            <p className="profile__subtitle">{userDescription}</p>
+            <p className="profile__subtitle">{dataUser.about}</p>
           </div>
         </div>
         <button onClick={() => onAddPlace(true)} className="button button_add_open" aria-label="добавление новых картинок" type="button"></button>
@@ -44,6 +28,8 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
             key={card._id}
             card={card}
             onCardClick={onCardClick}
+            onCardLike={onCardLike}
+            onCardDelete={onCardDelete}
           />
         ))}
       </section>
