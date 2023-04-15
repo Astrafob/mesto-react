@@ -7,6 +7,8 @@ import ImagePopup from './ImagePopup.js';
 import api from '../utils/api.js';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 import EditProfilePopup from './EditProfilePopup.js';
+import EditAvatarPopup from './EditAvatarPopup.js';
+import AddPlacePopup from './AddPlacePopup.js';
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -43,6 +45,28 @@ function App() {
       .catch((error) => {
         console.log(error)
       });
+  }
+
+  function handleUpdateAvatar(userAvatar) {
+    api.setUserAvatar(userAvatar)
+      .then(data => {
+        setCurrentUser(data);
+        closeAllPopups();
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  }
+
+  function handleAddPlaceSubmit(dataCard) {
+    api.addCard(dataCard)
+      .then(newCard => {
+        setCards([newCard, ...cards]);
+        closeAllPopups();
+      })
+      .catch((error) => {
+        console.log(error);
+      })
   }
 
   function handleCardLike(card) {
@@ -91,17 +115,11 @@ function App() {
           onClose={closeAllPopups}
         />
 
-        <PopupWithForm
-          name="avatar"
-          title="Обновить аватар"
-          buttonText="Сохранить"
+        <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
-        >
-          <input className="popup__input-text" id="profilePhotoURL" name="link" type="url" placeholder="Ссылка на картинку"
-            required />
-          <span className="popup__input-error profilePhotoURL-error"></span>
-        </PopupWithForm>
+          onUpdateAvatar={handleUpdateAvatar}
+        />
 
         <PopupWithForm
           name="confirm"
@@ -115,20 +133,11 @@ function App() {
           onUpdateUser={handleUpdateUser}
         />
 
-        <PopupWithForm
-          name="newPlace"
-          title="Новое место"
-          buttonText="Сохранить"
+        <AddPlacePopup
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
-        >
-          <input className="popup__input-text" id="placeName" name="name" type="text" maxLength="30" minLength="2"
-            placeholder="Название" required />
-          <span className="popup__input-error placeName-error"></span>
-          <input className="popup__input-text" id="placePhotoURL" name="link" type="url" placeholder="Ссылка на картинку"
-            required />
-          <span className="popup__input-error placePhotoURL-error"></span>
-        </PopupWithForm>
+          onAddPlace={handleAddPlaceSubmit}
+        />
 
       </div>
     </CurrentUserContext.Provider>

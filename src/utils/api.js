@@ -20,13 +20,11 @@ class Api {
     }).then(this._checkResponse);
   }
 
-  editProfileImage({ link }) {
+  setUserAvatar(link) {
     return fetch(`${this._url}/users/me/avatar`, {
       method: 'PATCH',
       headers: this._headers,
-      body: JSON.stringify({
-        avatar: link
-      })
+      body: JSON.stringify(link)
     }).then(this._checkResponse);
   }
 
