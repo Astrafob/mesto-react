@@ -37,9 +37,9 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
       onSubmit={handleSubmit}
     >
       <input className="popup__input-text" id="placeName" name="name" type="text" maxLength="30" minLength="2"
-        placeholder="Название" onChange={handleChangeNamePlace} required />
+        placeholder="Название" value={nameNewPlace} onChange={handleChangeNamePlace} required />
       <span className="popup__input-error placeName-error"></span>
-      <input className="popup__input-text" id="placePhotoURL" name="link" type="url" placeholder="Ссылка на картинку" onChange={handleChangeLinkPlace}
+      <input className="popup__input-text" id="placePhotoURL" name="link" type="url" placeholder="Ссылка на картинку" value={linkNewPlace} onChange={handleChangeLinkPlace}
         required />
       <span className="popup__input-error placePhotoURL-error"></span>
     </PopupWithForm>
